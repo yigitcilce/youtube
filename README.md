@@ -7,5 +7,5 @@ Usage :
 3) Change directory to youtube/main and go build
 4) Use command: ./main mp4 450p7goxZqg
 
-
+Video will be downloaded to the current directory.
 Presentation for this project will be added to this repo when its ready.
