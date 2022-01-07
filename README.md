@@ -1,2 +1,2 @@
-# youtube
-Video downloader, from youtube using golang
+# videoDownloader
+Downloads videos from youtube with golang
