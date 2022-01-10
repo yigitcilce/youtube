@@ -36,13 +36,13 @@ func (s *playerCache) Set(key string, operations playerConfig) {
 }
 
 func (c *Client) getPlayerConfig(ctx context.Context, videoID string) (playerConfig, error) {
+	// Flag 3: Embed Video
 	embedURL := fmt.Sprintf("https://youtube.com/embed/%s?hl=en", videoID)
 	embedBody, err := c.httpGetBodyBytes(ctx, embedURL)
 	if err != nil {
 		return nil, err
 	}
 
-	// example: /s/player/f676c671/player_ias.vflset/en_US/base.js
 	escapedBasejsURL := string(basejsPattern.Find(embedBody))
 	if escapedBasejsURL == "" {
 		return nil, errors.New("unable to find basejs URL in playerConfig")
@@ -53,6 +53,7 @@ func (c *Client) getPlayerConfig(ctx context.Context, videoID string) (playerCon
 		return config, nil
 	}
 
+	// Flag 4: JS source
 	config, err = c.httpGetBodyBytes(ctx, "https://youtube.com"+escapedBasejsURL)
 	if err != nil {
 		return nil, err

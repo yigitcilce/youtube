@@ -69,6 +69,7 @@ func (c *Client) videoFromID(ctx context.Context, id string) (*Video, error) {
 		ID: id,
 	}
 
+	// Flag 6: Parse ciphered data
 	err = v.parseVideoInfo(body)
 	if err == nil {
 		return v, nil
@@ -105,6 +106,7 @@ func (c *Client) videoDataByInnertube(ctx context.Context, id string, clientType
 		return nil, err
 	}
 
+	// Flag 5: Get Ciphered Info
 	resp, err := c.httpDo(req)
 	if err != nil {
 		return nil, err
@@ -162,6 +164,7 @@ func (c *Client) GetStreamContext(ctx context.Context, video *Video, format *For
 		return nil, 0, err
 	}
 
+	// Flag 9: Get deciphered Video
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
 		return nil, 0, err
@@ -183,6 +186,7 @@ func (c *Client) download(req *http.Request, w *io.PipeWriter, format *Format) {
 	loadChunk := func(pos int64) (int64, error) {
 		req.Header.Set("Range", fmt.Sprintf("bytes=%v-%v", pos, pos+chunkSize-1))
 
+		// Flag 10: Get one piece of chunk
 		resp, err := c.httpDo(req)
 		if err != nil {
 			return 0, err
@@ -234,6 +238,7 @@ func (c *Client) GetStreamURLContext(ctx context.Context, video *Video, format *
 		return "", ErrCipherNotFound
 	}
 
+	// Flag 7: Decipher the info and reach URI
 	// don't know whats going in decipher, goodluck reading
 	uri, err := c.decipherURL(ctx, video.ID, cipher)
 	if err != nil {

@@ -25,10 +25,12 @@ func init() {
 
 // download is the highest level functionality for downloading, currently only works for mp4
 func download(id string) error {
+	// Flag 1: Get video information from Youtube API
 	video, format, err := getVideoWithFormat(id)
 	if err != nil {
 		return err
 	}
 
+	// Flag 2: Create an mp4 file with content from API
 	return downloader.Download(context.Background(), video, format)
 }

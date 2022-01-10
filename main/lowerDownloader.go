@@ -46,6 +46,7 @@ func (yt *Downloader) Download(ctx context.Context, v *youtube.Video, format *yo
 	// Create the file with video name and extension. only mp4 for now
 	destFile := ConvertVideoTitletoFileName(v.Title) + ".mp4"
 
+	// Flag 8: File creation with title name
 	// Create output file
 	out, err := os.Create(destFile)
 	if err != nil {
@@ -68,6 +69,7 @@ func (yt *Downloader) videoDLWorker(ctx context.Context, out *os.File, video *yo
 		contentLength: float64(size),
 	}
 
+	// Flag 11: Visualize downloading progress
 	// Configuration of the progress bar
 	progress := mpb.New(mpb.WithWidth(100))
 	bar := progress.AddBar(
@@ -85,6 +87,8 @@ func (yt *Downloader) videoDLWorker(ctx context.Context, out *os.File, video *yo
 	)
 
 	reader := bar.ProxyReader(stream)
+
+	// Flag 12: Finally write onto file
 	mw := io.MultiWriter(out, prog)
 	_, err = io.Copy(mw, reader)
 	if err != nil {
